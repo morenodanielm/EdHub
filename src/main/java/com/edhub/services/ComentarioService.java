@@ -18,19 +18,25 @@ public class ComentarioService {
     
     private final ComentarioRepository comentarioRepository;
 
-    public void agregarComentario(Comentario comentario) {
-        comentarioRepository.save(comentario);
+    public Comentario agregarComentario(Comentario comentario) {
+        return comentarioRepository.save(comentario);
     }
 
     public List<Comentario> obtenerTodos() {
         return comentarioRepository.findAll();
     }
 
-    public void eliminarComentario(Comentario comentario) {
-        if(!comentarioRepository.existsById(comentario.getIdComentario())) {
+    public Comentario actualizarComentario(Long id, Comentario comentario) {
+        if(!comentarioRepository.existsById(id)) {
             throw new EdhubExceptions("El comentario no existe", HttpStatus.NOT_FOUND);
         }
-        comentarioRepository.delete(comentario);
+        return comentarioRepository.save(comentario);
+    }
+    public void eliminarComentario(Long id) {
+        if(!comentarioRepository.existsById(id)) {
+            throw new EdhubExceptions("El comentario no existe", HttpStatus.NOT_FOUND);
+        }
+        comentarioRepository.deleteById(id);
     }
     
     

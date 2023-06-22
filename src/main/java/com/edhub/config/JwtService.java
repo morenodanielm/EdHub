@@ -47,7 +47,7 @@ public class JwtService {
                 .setIssuedAt(new Date(System.currentTimeMillis()))
                 //establece hora de expiración de este token(después de pasar la fecha, ya no se debe aceptar dicho token)
                 // en este caso vence en una hora
-                .setExpiration(new Date(System.currentTimeMillis() + 10000 * 60))
+                .setExpiration(new Date(System.currentTimeMillis() + 10000 * 60 * 24))
                 //define con que se firma el token, en este caso getSignInKey genera el secreto y establecemos que la firma con ese secreto va a ser con el
                 //algoritmo HS256(SECURE_KEY es de 256 bits)
                 .signWith(getSignInKey(), SignatureAlgorithm.HS256)

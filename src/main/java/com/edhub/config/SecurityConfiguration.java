@@ -42,7 +42,9 @@ public class SecurityConfiguration {
                 // deben ser autenticadas
                 .authorizeHttpRequests((authz) -> {
                     // se pasa una lista de las rutas o patrones a personalizar
-                    authz.requestMatchers("/api/v1/auth/**")
+                    authz.requestMatchers("/api/v1/auth/**", "/v3/api-docs/**",
+                            "/swagger-ui/**",
+                            "/swagger-ui.html")
                             // indica que se permitirán todas las rutas pasadas a requestMatchers(la lista
                             // blanca)
                             .permitAll()

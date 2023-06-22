@@ -1,9 +1,7 @@
 package com.edhub.repositories;
 
 import java.time.LocalDateTime;
-import java.util.HashSet;
 import java.util.Optional;
-
 import com.edhub.models.Role;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -12,12 +10,9 @@ import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
-
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
-
 import com.edhub.models.Calificacion;
 import com.edhub.models.Usuario;
-import com.edhub.utils.GetUsuario;
 
 @DataJpaTest
 @ExtendWith(MockitoExtension.class)
@@ -109,7 +104,7 @@ public class CalificacionRepositoryTest {
         calificacion.setCalificador(usuarioCalificador);
 
         // save calificacion
-        System.out.println(underTest.save(calificacion));
+        underTest.save(calificacion);
 
         // when
         Optional<Calificacion> calificacionOptional = underTest.findByCalificador(usuarioCalificador);

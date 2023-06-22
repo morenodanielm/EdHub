@@ -2,29 +2,12 @@ package com.edhub.models;
 
 import java.time.LocalDateTime;
 import java.util.*;
-
+import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
-
-import jakarta.persistence.CascadeType;
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.EnumType;
-import jakarta.persistence.Enumerated;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
-import jakarta.persistence.Inheritance;
-import jakarta.persistence.InheritanceType;
-import jakarta.persistence.OneToMany;
-import jakarta.persistence.Table;
-import jakarta.persistence.UniqueConstraint;
-import jakarta.validation.constraints.Email;
-import jakarta.validation.constraints.NotBlank;
-import jakarta.validation.constraints.NotNull;
-import jakarta.validation.constraints.Size;
+import jakarta.validation.constraints.*;
 import lombok.Builder;
 
 @Builder
@@ -75,8 +58,11 @@ public class Usuario implements UserDetails {
 
     // define la asociación indica qué acciones deben conectarse en cascada para esa asociación.
     // all = PERSIST, MERGE, REMOVE, REFRESH, DETACH
-    @OneToMany(mappedBy = "usuario", cascade = CascadeType.ALL)
-    private Set<Mensaje> mensajesUsuario;
+    @OneToMany(mappedBy = "usuarioRemitente", cascade = CascadeType.ALL)
+    private Set<Mensaje> mensajesEnviados;
+
+    @OneToMany(mappedBy = "usuarioDestinatario", cascade = CascadeType.ALL)
+    private Set<Mensaje> mensajesRecibidos;
 
     @OneToMany(mappedBy = "usuario", cascade = CascadeType.ALL)
     private Set<Comentario> comentarios;
@@ -90,7 +76,8 @@ public class Usuario implements UserDetails {
     public Usuario() {
         this.calificacionesComoCalificado = new HashSet<>();
         this.calificacionesComoCalificador = new HashSet<>();
-        this.mensajesUsuario = new HashSet<>();
+        this.mensajesEnviados = new HashSet<>();
+        this.mensajesRecibidos = new HashSet<>();
     }
 
     public Usuario(String username, String email, String password, Role role, LocalDateTime fechaCreacion) {
@@ -102,9 +89,15 @@ public class Usuario implements UserDetails {
         this.fechaCreacion = fechaCreacion;
     }
 
-    public void addMensaje(Mensaje mensaje) {
-        if (mensajesUsuario != null) {
-            mensajesUsuario.add(mensaje);
+    public void addMensajeEnviado(Mensaje mensaje) {
+        if (mensajesEnviados != null) {
+            mensajesEnviados.add(mensaje);
+        }
+    }
+
+    public void addMensajeRecibido(Mensaje mensaje) {
+        if (mensajesRecibidos != null) {
+            mensajesRecibidos.add(mensaje);
         }
     }
 
@@ -212,12 +205,16 @@ public class Usuario implements UserDetails {
         this.fechaCreacion = fechaCreacion;
     }
 
-    public Set<Mensaje> getMensajesUsuario() {
-        return mensajesUsuario;
+    public Set<Mensaje> getMensajesEnviados() {
+        return mensajesEnviados;
     }
 
-    public void setMensajesUsuario(Set<Mensaje> mensajesUsuario) {
-        this.mensajesUsuario = mensajesUsuario;
+    public Set<Mensaje> getMensajesRecibidos() {
+        return mensajesRecibidos;
+    }
+
+    public Set<Comentario> getComentarios() {
+        return comentarios;
     }
 
     public Set<Calificacion> getCalificacionesComoCalificador() {
@@ -236,20 +233,30 @@ public class Usuario implements UserDetails {
         this.calificacionesComoCalificado = calificacionesComoCalificado;
     }
 
+    public void setMensajesEnviados(Set<Mensaje> mensajesEnviados) {
+        this.mensajesEnviados = mensajesEnviados;
+    }
+
+    public void setMensajesRecibidos(Set<Mensaje> mensajesRecibidos) {
+        this.mensajesRecibidos = mensajesRecibidos;
+    }
+
+    public void setComentarios(Set<Comentario> comentarios) {
+        this.comentarios = comentarios;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         Usuario usuario = (Usuario) o;
         return Objects.equals(idUsuario, usuario.idUsuario) && Objects.equals(username, usuario.username)
-                && Objects.equals(email, usuario.email) && Objects.equals(password, usuario.password)
-                && role == usuario.role && Objects.equals(fechaCreacion, usuario.fechaCreacion)
-                && Objects.equals(mensajesUsuario, usuario.mensajesUsuario);
+                && Objects.equals(email, usuario.email);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(idUsuario, username, email, password, role, fechaCreacion);
+        return Objects.hash(idUsuario, username, email);
     }
 
     @Override
@@ -261,7 +268,12 @@ public class Usuario implements UserDetails {
                 ", password='" + password + '\'' +
                 ", role=" + role +
                 ", fechaCreacion=" + fechaCreacion +
-                ", mensajesUsuario=" + mensajesUsuario +
+                ", comentarios=" + comentarios +
                 '}';
+    }
+
+    @PrePersist
+    public void prePersist() {
+        fechaCreacion = LocalDateTime.now();
     }
 }

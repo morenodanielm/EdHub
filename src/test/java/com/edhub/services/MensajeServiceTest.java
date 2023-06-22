@@ -1,9 +1,12 @@
 package com.edhub.services;
 
 import com.edhub.exceptions.EdhubExceptions;
+import com.edhub.mapper.MensajeDTOToMensaje;
 import com.edhub.models.Mensaje;
 import com.edhub.models.Usuario;
 import com.edhub.repositories.MensajeRepository;
+import com.edhub.services.dto.MensajeDTO;
+
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -31,23 +34,28 @@ class MensajeServiceTest {
     @Mock
     private MensajeRepository mensajeRepository;
 
+    @Mock
+    private UsuarioService usuarioService;
+
+    @Mock
+    private MensajeDTOToMensaje mensajeDTOToMensaje;
+
     @BeforeEach
     void setUp() {
-        underTest = new MensajeService(mensajeRepository);
+        underTest = new MensajeService(mensajeRepository, mensajeDTOToMensaje);
     }
 
     @Test
     void itShouldAgregarMensaje() {
         // given
-        Mensaje mensaje = Mensaje.builder()
-                .idMensaje(1L)
-                .mensaje("Hola, qué tal?")
-                .fechaCreacion(LocalDateTime.now())
-                .usuario(Usuario.builder().build())
+        MensajeDTO mensajeDTO = MensajeDTO.builder()
+                .contenido("Hola, que tal?")
+                .remitente("Pedro")
+                .destinatario("Rodrigo")
                 .build();
 
         // when
-        underTest.agregarMensaje(mensaje);
+        Mensaje mensaje = underTest.agregarMensaje(mensajeDTO);
 
         // then
         ArgumentCaptor<Mensaje> argumentCaptor = ArgumentCaptor.forClass(Mensaje.class);
@@ -75,9 +83,10 @@ class MensajeServiceTest {
         // given
         Mensaje mensaje = Mensaje.builder()
                 .idMensaje(1L)
-                .mensaje("Hola, qué tal?")
+                .contenido("Hola, que tal?")
+                .usuarioRemitente(Usuario.builder().build())
+                .usuarioDestinatario(Usuario.builder().build())
                 .fechaCreacion(LocalDateTime.now())
-                .usuario(Usuario.builder().build())
                 .build();
         given(mensajeRepository.existsById(anyLong())).willReturn(true);
 

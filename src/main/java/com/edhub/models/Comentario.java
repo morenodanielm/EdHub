@@ -91,13 +91,12 @@ public class Comentario {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         Comentario that = (Comentario) o;
-        return Objects.equals(idComentario, that.idComentario) && Objects.equals(calificacion, that.calificacion)
-                && Objects.equals(comentario, that.comentario) && Objects.equals(fechaCreacion, that.fechaCreacion);
+        return Objects.equals(idComentario, that.idComentario);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(idComentario, calificacion, comentario, fechaCreacion);
+        return Objects.hash(idComentario);
     }
 
     @Override
@@ -108,5 +107,10 @@ public class Comentario {
                 ", comentario='" + comentario + '\'' +
                 ", fechaCreacion=" + fechaCreacion +
                 '}';
+    }
+
+    @PrePersist
+    public void prePersist() {
+        fechaCreacion = LocalDateTime.now();
     }
 }

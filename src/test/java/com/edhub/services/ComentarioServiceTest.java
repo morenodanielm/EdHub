@@ -3,7 +3,6 @@ package com.edhub.services;
 import com.edhub.exceptions.EdhubExceptions;
 import com.edhub.models.Calificacion;
 import com.edhub.models.Comentario;
-import com.edhub.models.Usuario;
 import com.edhub.repositories.ComentarioRepository;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -12,10 +11,8 @@ import org.mockito.ArgumentCaptor;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.http.HttpStatus;
-
 import java.time.LocalDateTime;
 import java.util.List;
-
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 import static org.assertj.core.api.AssertionsForClassTypes.assertThatThrownBy;
 import static org.junit.jupiter.api.Assertions.*;
@@ -80,13 +77,13 @@ class ComentarioServiceTest {
         given(comentarioRepository.existsById(anyLong())).willReturn(true);
 
         // when
-        underTest.eliminarComentario(c);
+        underTest.eliminarComentario(c.getIdComentario());
 
         // then
-        ArgumentCaptor<Comentario> comentarioArgumentCaptor = ArgumentCaptor.forClass(Comentario.class);
-        verify(comentarioRepository).delete(comentarioArgumentCaptor.capture());
-        Comentario actual = comentarioArgumentCaptor.getValue();
-        assertThat(actual).isEqualTo(c);
+        ArgumentCaptor<Long> comentarioArgumentCaptor = ArgumentCaptor.forClass(Long.class);
+        verify(comentarioRepository).deleteById(comentarioArgumentCaptor.capture());
+        Long actual = comentarioArgumentCaptor.getValue();
+        assertThat(actual).isEqualTo(c.getIdComentario());
     }
 
     @Test
@@ -99,7 +96,7 @@ class ComentarioServiceTest {
 
         // when
         // then
-        assertThatThrownBy(() -> underTest.eliminarComentario(comentario))
+        assertThatThrownBy(() -> underTest.eliminarComentario(comentario.getIdComentario()))
                 .isInstanceOf(EdhubExceptions.class)
                 .hasMessageContaining("El comentario no existe", HttpStatus.NOT_FOUND);
     }

@@ -16,24 +16,30 @@ public class UsuarioService {
     private final UsuarioRepository usuarioRepository;
 
     public void agregarUsuario(Usuario usuario) {
-        if(usuarioRepository.existsByUsername(usuario.getUsername())) {
-            throw new EdhubExceptions("El username " + usuario.getUsername() + " ya existe", HttpStatus.CONFLICT);
-        }
         usuarioRepository.save(usuario);
     }
 
     public Usuario obtenerPorUsername(String username) {
         return usuarioRepository.findByUsername(username)
-        .orElseThrow(() -> new EdhubExceptions("Usuario " + username + " no hallado", HttpStatus.NOT_FOUND));
+            .orElseThrow(() -> new EdhubExceptions("Usuario " + username + " no hallado", HttpStatus.NOT_FOUND));
     }
 
-    public void eliminarUsuario(String username) {
-       noExisteUsername(username);
-        usuarioRepository.deleteByUsername(username);
+    public Usuario obtenerPorId(Long id) {
+        return usuarioRepository.findById(id)
+            .orElseThrow(() -> new EdhubExceptions("El usuario no existe", HttpStatus.NOT_FOUND));
     }
 
-    public Usuario actualizarUsuario(Usuario usuario) {
-        noExisteUsername(usuario.getUsername());
+    public void eliminarUsuario(Long id) {
+        if(!usuarioRepository.existsById(id)) {
+            throw new EdhubExceptions("Usuario no fue hallado", HttpStatus.NOT_FOUND);
+        }
+        usuarioRepository.deleteById(id);
+    }
+
+    public Usuario actualizarUsuario(Long id, Usuario usuario) {
+        if(!usuarioRepository.existsById(id)) {
+            throw new EdhubExceptions("Usuario " + usuario.getUsername() + " no hallado", HttpStatus.NOT_FOUND);
+        }
         return usuarioRepository.save(usuario);
     }
 
@@ -41,10 +47,7 @@ public class UsuarioService {
         return usuarioRepository.findAll();
     }
 
-    private void noExisteUsername(String username) {
-        if(!usuarioRepository.existsByUsername(username)) {
-            throw new EdhubExceptions("Usuario " + username + " no hallado", HttpStatus.NOT_FOUND);
-        }
+    public boolean existePorId(Long id) {
+        return usuarioRepository.existsById(id);
     }
-    
 }

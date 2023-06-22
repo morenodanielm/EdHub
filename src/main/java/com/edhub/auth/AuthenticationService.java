@@ -1,14 +1,11 @@
 package com.edhub.auth;
 
 import com.edhub.config.JwtService;
-import com.edhub.models.Role;
-import com.edhub.models.Usuario;
+import com.edhub.models.*;
 import com.edhub.services.UsuarioService;
 import java.time.LocalDateTime;
-
 import org.springframework.beans.factory.annotation.Qualifier;
-import org.springframework.security.authentication.AuthenticationManager;
-import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.authentication.*;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import lombok.RequiredArgsConstructor;
@@ -18,9 +15,7 @@ import lombok.RequiredArgsConstructor;
 public class AuthenticationService {
 
     private final UsuarioService usuarioService;
-
     private final PasswordEncoder passwordEncoder;
-
     private final JwtService jwtService;
 
     @Qualifier()

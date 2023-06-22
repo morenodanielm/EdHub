@@ -2,6 +2,7 @@ package com.edhub.repositories;
 
 import com.edhub.models.Role;
 import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.CsvSource;
@@ -35,35 +36,27 @@ public class UsuarioRepositoryTest {
                 LocalDateTime.now());
     }
 
-    @ParameterizedTest
-    @CsvSource(value = {
-        "daniel14", // deberia fallar
-        "carlos19" // deberia pasar
-    })
-    void itShouldDeleteByUsername(String username) {
+    @Test
+    void itShouldDeleteById() {
         // given
         underTest.save(usuario);
 
         // when
-        underTest.deleteByUsername(username);
+        underTest.deleteById(usuario.getIdUsuario());
  
         // then
         int expected = 0;
         int actual = underTest.findAll().size();
-        assertThat(expected).isEqualTo(actual);
+        assertThat(actual).isEqualTo(expected);
     }
 
-    @ParameterizedTest
-    @CsvSource(value = {
-        "daniel14", // deberia fallar
-        "carlos19" // deberia pasar
-    })
-    void itShouldIfUserExistsByUsername(String username) {
+    @Test
+    void itShouldVerifyIfUserExistsById() {
         // given
         underTest.save(usuario);
 
         // when
-        boolean exists = underTest.existsByUsername(username);
+        boolean exists = underTest.existsById(usuario.getIdUsuario());
 
         // then 
         assertThat(exists).isTrue();

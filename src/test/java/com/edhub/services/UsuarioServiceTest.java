@@ -7,23 +7,18 @@ import com.edhub.repositories.UsuarioRepository;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
-import org.junit.jupiter.params.ParameterizedTest;
-import org.junit.jupiter.params.provider.CsvSource;
 import org.mockito.ArgumentCaptor;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.http.HttpStatus;
-
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
-
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 import static org.assertj.core.api.AssertionsForClassTypes.assertThatThrownBy;
 import static org.junit.jupiter.api.Assertions.*;
-import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.anyLong;
 import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.BDDMockito.given;
 import static org.mockito.Mockito.verify;
@@ -60,7 +55,7 @@ class UsuarioServiceTest {
         underTest.agregarUsuario(usuario);
 
         // then
-        // usado para capturar el argumento cuando se llama el método save del repository
+        // usado para capturar el argumento cuando se llama el mï¿½todo save del repository
         ArgumentCaptor<Usuario> usuarioArgumentCaptor = ArgumentCaptor.forClass(Usuario.class);
         verify(usuarioRepository).save(usuarioArgumentCaptor.capture());
         // obtiene el argumento capturado
@@ -72,7 +67,7 @@ class UsuarioServiceTest {
     @Test
     void itShouldGetByUsername() {
         // given
-        // cuando se invoque el método findByUsername con cualquier string como parámetro, retornaremos un usuario, esto para evitar exception
+        // cuando se invoque el mï¿½todo findByUsername con cualquier string como parï¿½metro, retornaremos un usuario, esto para evitar exception
         given(usuarioRepository.findByUsername(anyString()))
                 .willReturn(Optional.of(
                         Usuario.builder()
@@ -89,30 +84,30 @@ class UsuarioServiceTest {
     @Test
     void itShouldDeleteUserByUsername() {
         // given
-        given(usuarioRepository.existsByUsername(anyString()))
+        given(usuarioRepository.existsById(anyLong()))
                 .willReturn(true);
 
         // when
-        String username = "faustog1";
-        underTest.eliminarUsuario(username);
+        underTest.eliminarUsuario(1L);
 
         // then
-        ArgumentCaptor<String> argumentCaptor = ArgumentCaptor.forClass(String.class);
-        verify(usuarioRepository).deleteByUsername(argumentCaptor.capture());
-        String actual = argumentCaptor.getValue();
-        assertThat(actual).isEqualTo(username);
+        ArgumentCaptor<Long> argumentCaptor = ArgumentCaptor.forClass(Long.class);
+        verify(usuarioRepository).deleteById(argumentCaptor.capture());
+        Long actual = argumentCaptor.getValue();
+        assertThat(actual).isEqualTo(1L);
     }
 
     @Test
     void itShouldUpdateUser() {
         // given
-        given(usuarioRepository.existsByUsername(anyString()))
+        given(usuarioRepository.existsById(anyLong()))
                 .willReturn(true);
 
         // when
         String expected = "faustog1";
         usuario.setUsername(expected);
-        underTest.actualizarUsuario(usuario);
+        usuario.setIdUsuario(1L);
+        underTest.actualizarUsuario(1L, usuario);
 
         // then
         ArgumentCaptor<Usuario> argumentCaptor = ArgumentCaptor.forClass(Usuario.class);
@@ -143,11 +138,12 @@ class UsuarioServiceTest {
     @Test
     void itShouldThrowExceptionWhenUsernameExists() {
         // given
-        given(usuarioRepository.existsByUsername(anyString()))
+        given(usuarioRepository.existsById(anyLong()))
                 .willReturn(true);
 
         // when
         // then
+        this.usuario.setIdUsuario(1L);
         assertThatThrownBy(() -> underTest.agregarUsuario(this.usuario))
                 .isInstanceOf(EdhubExceptions.class)
                 .hasMessageContaining("El username " + usuario.getUsername() + " ya existe", HttpStatus.CONFLICT);

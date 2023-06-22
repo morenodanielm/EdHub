@@ -90,13 +90,12 @@ public class Calificacion {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         Calificacion that = (Calificacion) o;
-        return calificacion == that.calificacion && Objects.equals(idCalificacion, that.idCalificacion)
-                && Objects.equals(fechaCreacion, that.fechaCreacion);
+        return calificacion == that.calificacion && Objects.equals(idCalificacion, that.idCalificacion);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(idCalificacion, calificacion, fechaCreacion);
+        return Objects.hash(idCalificacion);
     }
 
     @Override
@@ -106,5 +105,10 @@ public class Calificacion {
                 ", calificacion=" + calificacion +
                 ", fechaCreacion=" + fechaCreacion +
                 '}';
+    }
+
+    @PrePersist
+    public void prePersist() {
+        fechaCreacion = LocalDateTime.now();
     }
 }
