@@ -1,40 +1,40 @@
 package com.edhub.models;
 
 import jakarta.persistence.*;
-import jakarta.validation.constraints.Email;
-import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
-import jakarta.validation.constraints.Size;
-import lombok.*;
-
-import java.time.LocalDateTime;
-import java.util.Objects;
-import java.util.Set;
+import java.util.*;
 
 @Entity
 @Table(name = "tutores")
+// clase modelo que representa la tabla tutores en la BD
 public class Tutor extends Usuario{
 
-    private Especialidad especialidad;
+    // atributos
+    @Column(name = "especialidad")
+    @Enumerated(value = EnumType.STRING)
+    @NotNull
+    private EnumSet<Especialidad> especialidades;
 
+    @Column(name = "disponible")
     private boolean disponible;
 
+    // constructores
     public Tutor() {
 
     }
 
-    public Tutor(Especialidad especialidad, boolean disponible) {
+    public Tutor(boolean disponible) {
         super();
-        this.especialidad = especialidad;
         this.disponible = disponible;
     }
 
-    public Especialidad getEspecialidad() {
-        return especialidad;
+    // getter y setter
+    public EnumSet<Especialidad> getEspecialidad() {
+        return especialidades;
     }
 
-    public void setEspecialidad(Especialidad especialidad) {
-        this.especialidad = especialidad;
+    public void setEspecialidad(EnumSet<Especialidad> especialidades) {
+        this.especialidades = especialidades;
     }
 
     public boolean isDisponible() {
@@ -45,6 +45,7 @@ public class Tutor extends Usuario{
         this.disponible = disponible;
     }
 
+    // métodos para comparar objetos de esta clase
     @Override
     public boolean equals(Object o) {
         return super.equals(o);
@@ -55,10 +56,11 @@ public class Tutor extends Usuario{
         return super.hashCode();
     }
 
+    // proporciona información del objeto actual
     @Override
     public String toString() {
         return "Tutor{" +
-                "especialidad=" + especialidad +
+                "especialidad=" + especialidades +
                 ", disponible=" + disponible +
                 '}';
     }

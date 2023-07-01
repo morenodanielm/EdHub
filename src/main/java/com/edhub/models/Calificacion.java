@@ -12,8 +12,10 @@ import lombok.Builder;
 @AllArgsConstructor
 @Entity
 @Table(name = "calificaciones")
+// clase modelo que representa la tabla calificaciones en la BD
 public class Calificacion {
 
+    // atributos
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id_calificacion")
@@ -35,6 +37,7 @@ public class Calificacion {
     @Column(name = "fecha_creacion")
     private LocalDateTime fechaCreacion;
 
+    // constructores
     public Calificacion() {
     }
 
@@ -45,6 +48,7 @@ public class Calificacion {
         this.fechaCreacion = fechaCreacion;
     }
 
+    // getter y setter
     public Long getIdCalificacion() {
         return idCalificacion;
     }
@@ -85,6 +89,7 @@ public class Calificacion {
         this.fechaCreacion = fechaCreacion;
     }
 
+    // métodos para comparar objetos de esta clase
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
@@ -98,6 +103,7 @@ public class Calificacion {
         return Objects.hash(idCalificacion);
     }
 
+    // proporciona información del objeto actual
     @Override
     public String toString() {
         return "Calificacion{" +
@@ -107,6 +113,7 @@ public class Calificacion {
                 '}';
     }
 
+    // este método se ejecutará antes de persistir el objeto mensaje para agregar la fecha actual
     @PrePersist
     public void prePersist() {
         fechaCreacion = LocalDateTime.now();

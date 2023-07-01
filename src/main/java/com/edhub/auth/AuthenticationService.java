@@ -14,6 +14,7 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 public class AuthenticationService {
 
+    // atributos
     private final UsuarioService usuarioService;
     private final PasswordEncoder passwordEncoder;
     private final JwtService jwtService;
@@ -43,8 +44,8 @@ public class AuthenticationService {
     }
 
     public AuthenticationResponse authenticate(AuthenticationRequest request) {
-        // autenticamos basado en el username(email en este caso) y la contraseña, retornará un objeto totalmente autenticado con credenciales
-        // en caso de fallar lanza AuthenticationException, y la app lanzará un 403 forbidden
+        // autenticamos basado en el username y la contraseña. Retornará un objeto totalmente autenticado con credenciales.
+        // en caso de fallar lanza AuthenticationException, y la app arrojará un 403 forbidden
         authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(
                 request.getUsername(),
                 request.getPassword()
@@ -53,7 +54,7 @@ public class AuthenticationService {
         var user = usuarioService.obtenerPorUsername(request.getUsername());
         // genera el token a partir del usuario(sin claims o privilegios extras)
         var jwtToken = jwtService.generateToken(user);
-        // construye un objeto AuthenticationResponse con el token obtenido
+        // construye un objeto AuthenticationResponse con el token generado
         return AuthenticationResponse.builder()
                 .token(jwtToken)
                 .build();

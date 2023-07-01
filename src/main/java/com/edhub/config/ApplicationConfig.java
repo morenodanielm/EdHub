@@ -2,20 +2,18 @@ package com.edhub.config;
 
 import org.springframework.context.annotation.*;
 import org.springframework.security.authentication.*;
-import org.springframework.security.authentication.AuthenticationProvider;
 import org.springframework.security.authentication.dao.DaoAuthenticationProvider;
 import org.springframework.security.config.annotation.authentication.configuration.AuthenticationConfiguration;
-import org.springframework.security.core.userdetails.UserDetailsService;
-import org.springframework.security.core.userdetails.UsernameNotFoundException;
+import org.springframework.security.core.userdetails.*;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
-
+import org.springframework.web.servlet.config.annotation.*;
 import com.edhub.repositories.UsuarioRepository;
-
 import lombok.RequiredArgsConstructor;
 
 @Configuration
 @RequiredArgsConstructor
+// contendrá configuración de seguridad
 public class ApplicationConfig {
 
     private final UsuarioRepository usuarioRepository;
@@ -51,6 +49,17 @@ public class ApplicationConfig {
     public PasswordEncoder passwordEncoder() {
         return new BCryptPasswordEncoder();
     }
+
+    // retorna un bean con la configuración cors, para permitir peticiones del cliente(front, navegador, etc)
+    @Bean
+	public WebMvcConfigurer corsConfigurer() {
+		return new WebMvcConfigurer() {
+			@Override
+			public void addCorsMappings(CorsRegistry registry) {
+				registry.addMapping("/**").allowedOrigins("http://localhost:3000");
+			}
+		};
+	}
 
 
     

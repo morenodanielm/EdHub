@@ -101,6 +101,7 @@ class MensajeServiceTest {
     }
 
     @Test
+    // test para verificar que se arroje la excepción cuando se debe lanzar
     void itShouldThrowExceptionWhenMensajeDoesNotExits() {
         // given
         // when

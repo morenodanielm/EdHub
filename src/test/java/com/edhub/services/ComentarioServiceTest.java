@@ -1,11 +1,9 @@
 package com.edhub.services;
 
 import com.edhub.exceptions.EdhubExceptions;
-import com.edhub.models.Calificacion;
-import com.edhub.models.Comentario;
+import com.edhub.models.*;
 import com.edhub.repositories.ComentarioRepository;
-import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.*;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.ArgumentCaptor;
 import org.mockito.Mock;
@@ -13,21 +11,24 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.http.HttpStatus;
 import java.time.LocalDateTime;
 import java.util.List;
-import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
-import static org.assertj.core.api.AssertionsForClassTypes.assertThatThrownBy;
+import static org.assertj.core.api.AssertionsForClassTypes.*;
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.anyLong;
 import static org.mockito.BDDMockito.given;
 import static org.mockito.Mockito.verify;
 
 @ExtendWith(MockitoExtension.class)
+// clase test para calificacion service
 class ComentarioServiceTest {
 
+    // objeto bajo test
     private ComentarioService underTest;
 
     @Mock
+    // dependencia que usa el comentario service
     private ComentarioRepository comentarioRepository;
 
+    // se ejecutará antes de cada test para inicializar el service
     @BeforeEach
     void setUp() {
         underTest = new ComentarioService(comentarioRepository);

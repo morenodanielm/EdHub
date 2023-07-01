@@ -10,6 +10,7 @@ import com.edhub.exceptions.EdhubExceptions;
 
 
 @ControllerAdvice
+// manejará todas las excepciones lanzadas en la API
 public class ExceptionsController extends ResponseEntityExceptionHandler{
 
     @org.springframework.web.bind.annotation.ExceptionHandler(value = {EdhubExceptions.class})

@@ -1,8 +1,7 @@
 package com.edhub.services;
 
 import com.edhub.exceptions.EdhubExceptions;
-import com.edhub.models.Role;
-import com.edhub.models.Usuario;
+import com.edhub.models.*;
 import com.edhub.repositories.UsuarioRepository;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -13,8 +12,7 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.http.HttpStatus;
 import java.time.LocalDateTime;
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 import static org.assertj.core.api.AssertionsForClassTypes.assertThatThrownBy;
 import static org.junit.jupiter.api.Assertions.*;
@@ -107,7 +105,7 @@ class UsuarioServiceTest {
         String expected = "faustog1";
         usuario.setUsername(expected);
         usuario.setIdUsuario(1L);
-        underTest.actualizarUsuario(1L, usuario);
+        underTest.actualizarUsuario(usuario);
 
         // then
         ArgumentCaptor<Usuario> argumentCaptor = ArgumentCaptor.forClass(Usuario.class);
@@ -118,6 +116,7 @@ class UsuarioServiceTest {
 
 
     @Test
+    // verificará que se pueda obtener todos los usuarios de manera correcta
     void itShouldGetAll() {
         // given
         given(usuarioRepository.findAll())
@@ -136,20 +135,21 @@ class UsuarioServiceTest {
     }
 
     @Test
+    // test para verificar que se arroje la excepción cuando se debe lanzar
     void itShouldThrowExceptionWhenUsernameExists() {
         // given
-        given(usuarioRepository.existsById(anyLong()))
+        given(usuarioRepository.existsByUsername(anyString()))
                 .willReturn(true);
 
         // when
         // then
-        this.usuario.setIdUsuario(1L);
         assertThatThrownBy(() -> underTest.agregarUsuario(this.usuario))
                 .isInstanceOf(EdhubExceptions.class)
-                .hasMessageContaining("El username " + usuario.getUsername() + " ya existe", HttpStatus.CONFLICT);
+                .hasMessageContaining("El usuario ya existe", HttpStatus.CONFLICT);
     }
 
     @Test
+    // test para verificar que se arroje la excepción cuando se debe lanzar
     void itShouldThrowExceptionWhenUsernameDoesNotExists() {
         // given
         String username = "juan23";

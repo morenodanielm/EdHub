@@ -12,8 +12,10 @@ import lombok.Builder;
 @AllArgsConstructor
 @Entity
 @Table(name = "mensajes")
-public class Mensaje {
+// clase modelo que representa la tabla mensajes en la BD
+public class Mensaje implements Comparable<Mensaje> {
 
+    // atributos
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id_mensaje")
@@ -39,6 +41,7 @@ public class Mensaje {
     private LocalDateTime fechaCreacion;
 
 
+    // constructores
     public Mensaje() {
     }
 
@@ -50,6 +53,7 @@ public class Mensaje {
         this.fechaCreacion = fechaCreacion;
     }
 
+    // getter y setter
     public Long getIdMensaje() {
         return idMensaje;
     }
@@ -106,6 +110,7 @@ public class Mensaje {
         this.fechaCreacion = fechaCreacion;
     }
 
+    // métodos para comparar objetos de esta clase
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
@@ -119,6 +124,7 @@ public class Mensaje {
         return Objects.hash(idMensaje);
     }
 
+    // proporciona información del objeto actual
     @Override
     public String toString() {
         return "Mensaje{" +
@@ -131,9 +137,16 @@ public class Mensaje {
                 '}';
     }
 
+    // este método se ejecutará antes de persistir el objeto mensaje para agregar la fecha actual
     @PrePersist
     public void prePersist() {
         fechaCreacion = LocalDateTime.now();
     }
+
+    // comparará los objetos mensaje por fecha(eso servirá a la hora se retornar la lista de mensajes)
+	@Override
+	public int compareTo(Mensaje o) {
+		return getFechaCreacion().compareTo(o.getFechaCreacion());
+	}
 
 }

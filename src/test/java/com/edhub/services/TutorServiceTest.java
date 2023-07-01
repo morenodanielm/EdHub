@@ -1,23 +1,17 @@
 package com.edhub.services;
 
 import com.edhub.exceptions.EdhubExceptions;
-import com.edhub.models.Especialidad;
-import com.edhub.models.Role;
-import com.edhub.models.Tutor;
-import com.edhub.models.Usuario;
+import com.edhub.models.*;
 import com.edhub.repositories.TutorRepository;
-import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.*;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.http.HttpStatus;
-
 import java.time.LocalDateTime;
-import java.util.List;
-
+import java.util.*;
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 import static org.assertj.core.api.AssertionsForClassTypes.assertThatThrownBy;
 import static org.junit.jupiter.api.Assertions.*;
@@ -51,8 +45,9 @@ class TutorServiceTest {
         tutor.setEmail("luck@mail.com");
         tutor.setPassword("12345678");
         tutor.setRole(Role.ROLE_TUTOR);
-        tutor.setEspecialidad(Especialidad.JAVA);
+        tutor.setEspecialidad(EnumSet.of(Especialidad.JAVA));
         tutor.setDisponible(false);
+        given(tutorRepository.save(tutor)).willReturn(tutor);
 
         // when
         Tutor tutor1 = underTest.agregarTutor(tutor);
@@ -71,7 +66,7 @@ class TutorServiceTest {
         tutor.setPassword("12345678");
         tutor.setRole(Role.ROLE_TUTOR);
         tutor.setFechaCreacion(LocalDateTime.now());
-        tutor.setEspecialidad(Especialidad.JAVA);
+        tutor.setEspecialidad(EnumSet.of(Especialidad.JAVA));
         tutor.setDisponible(false);
         given(tutorRepository.findAllByEspecialidad(any())).willReturn(List.of(tutor));
         given(tutorRepository.existsByEspecialidad(Especialidad.JAVA)).willReturn(true);
@@ -87,6 +82,7 @@ class TutorServiceTest {
     }
 
     @Test
+    // test para verificar que se arroje la excepción cuando se debe lanzar
     void itShouldThrowExceptionWhenEspecialidadDoesNotExists() {
         // given
         given(tutorRepository.existsByEspecialidad(any())).willReturn(false);

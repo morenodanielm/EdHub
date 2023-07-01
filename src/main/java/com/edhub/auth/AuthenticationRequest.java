@@ -6,9 +6,10 @@ import lombok.*;
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
+// contendrá datos de la petición para la autenticación de un usuario
 public class AuthenticationRequest {
 
-    // guarda datos de la petición para la autenticación de un usuario
+    // atributos
     private String username;
     private String password;
 

@@ -20,20 +20,22 @@ import lombok.Builder;
                 @UniqueConstraint(name = "unique_usuario_email", columnNames = "email")
         }
 )
-// esto es La herencia de entidades significa que podemos usar consultas polimórficas para recuperar todas las entidades de subclase 
+// esto es la herencia de entidades significa que podemos usar consultas polimórficas para recuperar todas las entidades de subclase
 // al consultar una superclase.
 // se define una jerarquia de entidades, donde Usuario será padre de Tutor, cada entidad tendrá su tabla y el campo primario de Tutor será 
 // el mismo de Usuario
 @Inheritance(strategy = InheritanceType.JOINED)
+// clase modelo que representa la tabla usuarios en la BD
 public class Usuario implements UserDetails {
 
+    // atributos
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id_usuario")
     private Long idUsuario;
 
     @Column(name = "username")
-    @Size(max = 10)
+    @Size(max = 30)
     @NotBlank
     private String username;
 
@@ -73,6 +75,7 @@ public class Usuario implements UserDetails {
     @OneToMany(mappedBy = "calificador", cascade = CascadeType.ALL)
     private Set<Calificacion> calificacionesComoCalificado;
 
+    // constructores
     public Usuario() {
         this.calificacionesComoCalificado = new HashSet<>();
         this.calificacionesComoCalificador = new HashSet<>();
@@ -116,7 +119,7 @@ public class Usuario implements UserDetails {
         }
     }
 
-    //methods for userDetails
+    //métodos de la interface userDetails
     // obtenemos una representación String de una autoridad otorgada(roles) al objeto Authentication.
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
@@ -162,9 +165,7 @@ public class Usuario implements UserDetails {
         return username;
     }
 
-    // methods for Usuario
-
-
+    // getter y setter
     public Long getIdUsuario() {
         return idUsuario;
     }
@@ -245,6 +246,7 @@ public class Usuario implements UserDetails {
         this.comentarios = comentarios;
     }
 
+    // métodos para comparar objetos de esta clase
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
@@ -259,6 +261,7 @@ public class Usuario implements UserDetails {
         return Objects.hash(idUsuario, username, email);
     }
 
+    // proporciona información del objeto actual
     @Override
     public String toString() {
         return "Usuario{" +
@@ -272,8 +275,10 @@ public class Usuario implements UserDetails {
                 '}';
     }
 
+    // este método se ejecutará antes de persistir el objeto mensaje para agregar la fecha actual
     @PrePersist
     public void prePersist() {
         fechaCreacion = LocalDateTime.now();
     }
+
 }

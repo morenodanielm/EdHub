@@ -1,24 +1,19 @@
 package com.edhub.config;
 
-import org.springdoc.core.GroupedOpenApi;
-import org.springframework.context.annotation.Bean;
-import org.springframework.context.annotation.Configuration;
-
+import org.springframework.context.annotation.*;
 import io.swagger.v3.oas.annotations.OpenAPIDefinition;
-import io.swagger.v3.oas.annotations.info.Contact;
-import io.swagger.v3.oas.annotations.info.Info;
-import io.swagger.v3.oas.annotations.info.License;
+import io.swagger.v3.oas.annotations.info.*;
 import io.swagger.v3.oas.annotations.servers.Server;
 import io.swagger.v3.oas.models.Components;
 import io.swagger.v3.oas.models.OpenAPI;
-import io.swagger.v3.oas.models.security.SecurityRequirement;
-import io.swagger.v3.oas.models.security.SecurityScheme;
+import io.swagger.v3.oas.models.security.*;
 
 @Configuration
+// contiene toda la información de la API documentada con Open API
 @OpenAPIDefinition(
   info =@Info(
     title = "Edhub API",
-    version = "3.0.1",
+    version = "1.0",
     contact = @Contact(
       name = "Edhub", email = "edhub@mail.com", url = "https://www.edhub.com"
     ),
@@ -29,21 +24,15 @@ import io.swagger.v3.oas.models.security.SecurityScheme;
     description = "Edhub API for manage of students and professors"
   ),
   servers = @Server(
-    url = "localhost:8080",
-    description = "Production"
+    url = "http://localhost:8080",
+    description = "Development"
   )
 )
 public class OpenApiConfig {
-    
-    /*@Bean
-    public GroupedOpenApi publicApi() {
-        return GroupedOpenApi.builder()
-                .group("Edhub")
-                .pathsToExclude("/api/v1/auth/**")
-                .build();
-    }*/
 
+    //swagger ui = http://localhost:8080/swagger-ui.html
     @Bean
+    // configuración de seguridad global para OpenAPI
     public OpenAPI customizeOpenAPI() {
         final String securitySchemeName = "bearerAuth";
         return new OpenAPI()

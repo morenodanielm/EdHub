@@ -13,6 +13,7 @@ import org.springframework.stereotype.Service;
 
 @RequiredArgsConstructor
 @Service
+// clase de servicio para entidad calificacion
 public class CalificacionService {
 
     private final CalificacionRepository calificacionRepository;
@@ -26,11 +27,13 @@ public class CalificacionService {
     }
 
     public Calificacion obtenerPorUsuarioCalificado(Usuario usuarioCalificado) {
+        // si se encuentra la calificación, se retornará, de lo contrario, se lanzará una excepción
         return calificacionRepository.findByCalificado(usuarioCalificado)
             .orElseThrow(() -> new EdhubExceptions("El usuario no tiene calificaciones", HttpStatus.NOT_FOUND));
     }
 
     public Calificacion obtenerPorUsuarioCalificador(Usuario usuarioCalificador) {
+        // si se encuentra la calificación, se retornará, de lo contrario, se lanzará una excepción
         return calificacionRepository.findByCalificador(usuarioCalificador)
             .orElseThrow(() -> new EdhubExceptions("El usuario no ha realizado calificaciones", HttpStatus.NOT_FOUND));
     }
@@ -44,6 +47,7 @@ public class CalificacionService {
     }
 
     public void actualizarCalificacion(Long id, Calificacion calificacion) {
+        // si se encuentra la calificación, se actualizará, de lo contrario, se lanzará una excepción
         if(!calificacionRepository.existsById(id)) {
             throw new EdhubExceptions("No existe la calificación", HttpStatus.NOT_FOUND);
         }
@@ -51,6 +55,7 @@ public class CalificacionService {
     }
 
     public void eliminarCalificacion(Long id) {
+        // si se encuentra la calificación, se eliminará, de lo contrario, se lanzará una excepción
         if(!calificacionRepository.existsById(id)) {
             throw new EdhubExceptions("No existe la calificación", HttpStatus.NOT_FOUND);
         }

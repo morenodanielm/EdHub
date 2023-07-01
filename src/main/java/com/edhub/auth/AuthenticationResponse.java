@@ -6,8 +6,9 @@ import lombok.*;
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
+// se le retornará el objeto de la clase con el token al cliente cuando se registre o autentique
 public class AuthenticationResponse {
 
-    // se le retornará al cliente cuando se registre o autentique
+    // atributos
     private String token;
 }

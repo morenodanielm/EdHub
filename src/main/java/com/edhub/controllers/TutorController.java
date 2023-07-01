@@ -1,15 +1,9 @@
 package com.edhub.controllers;
 
-import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
-
-import com.edhub.models.Tutor;
+import java.util.List;
+import org.springframework.web.bind.annotation.*;
+import com.edhub.models.*;
 import com.edhub.services.TutorService;
-
 import lombok.RequiredArgsConstructor;
 
 @RequiredArgsConstructor
@@ -18,13 +12,28 @@ import lombok.RequiredArgsConstructor;
 public class TutorController {
     
     private final TutorService tutorService;
-    
+
+    // agregará un nuevo tutor
+    @PostMapping("/agregar-tutor")
     public Tutor agregarTutor(@RequestBody Tutor tutor) {
         return tutorService.agregarTutor(tutor);
     }
 
+    // actualizará un tutor existente
+    @PutMapping("/agregar-tutor")
+    public Tutor actualizarTutor(@RequestBody Tutor tutor) {
+        return tutorService.agregarTutor(tutor);
+    }
+
+    // convertirá a un usuario normal en un tutor
     @GetMapping("/usuario-tutor/{id}")
-    public Tutor usuarioATutor(@PathVariable Long id) {
-        return tutorService.deUsuarioATutor(id);
+    public Tutor usuarioATutor(@PathVariable Long id, @RequestBody Especialidad[] especialidades) {
+        return tutorService.deUsuarioATutor(id, especialidades);
+    }
+
+    // retornará todos los tutores
+    @GetMapping
+    public List<Tutor> obtenerTodos() {
+    	return tutorService.obtenerTodos();
     }
 }

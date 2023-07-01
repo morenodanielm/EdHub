@@ -16,9 +16,11 @@ import com.edhub.models.Usuario;
 
 @DataJpaTest
 @ExtendWith(MockitoExtension.class)
+// clase test para calificacion repository
 public class CalificacionRepositoryTest {
 
     @Autowired
+    // objeto bajo test
     private CalificacionRepository underTest;
 
     @Autowired
@@ -36,6 +38,7 @@ public class CalificacionRepositoryTest {
     private Calificacion calificacion;
 
     @BeforeEach
+    // se ejecutará antes de cada método test para instanciar tres objetos
     void setUp() {
         usuarioCalificador = new Usuario(
                 "carlos19",
@@ -60,23 +63,24 @@ public class CalificacionRepositoryTest {
                 .build();
     }
 
+    // test para verficar que se puede obtener una calificación con el usuario calificado
     @Test
     void itShouldFindByUsuarioCalificado() {
         // given
 
-        // set data for entity usuario
+        // establecer datos para la entidad usuario
         usuarioCalificado.addCalificacionesCalificado(calificacion);
         usuarioCalificador.addCalificacionesCalificador(calificacion);
 
-        // save usuarios
+        // guardar usuarios
         usuarioRepository.save(usuarioCalificado);
         usuarioRepository.save(usuarioCalificador);
 
-        // set calificadores
+        // establecer calificadores
         calificacion.setCalificado(usuarioCalificado);
         calificacion.setCalificador(usuarioCalificador);
 
-        // save calificacion
+        // guardar calificacion
         System.out.println(underTest.save(calificacion));
 
         // when
@@ -87,23 +91,24 @@ public class CalificacionRepositoryTest {
         assertThat(actual).isEqualTo(calificacion);
     }
 
+    // test para verficar que se puede obtener una calificación con el usuario calificador
     @Test
     void itShouldFindByUsuarioCalificador() {
         // given
 
-        // set data for entity usuario
+        // establecer datos para la entidad usuario
         usuarioCalificado.addCalificacionesCalificado(calificacion);
         usuarioCalificador.addCalificacionesCalificador(calificacion);
 
-        // save usuarios
+        // guardar usuarios
         usuarioRepository.save(usuarioCalificado);
         usuarioRepository.save(usuarioCalificador);
 
-        // set calificadores
+        // establecer calificadores
         calificacion.setCalificado(usuarioCalificado);
         calificacion.setCalificador(usuarioCalificador);
 
-        // save calificacion
+        // guardar calificacion
         underTest.save(calificacion);
 
         // when

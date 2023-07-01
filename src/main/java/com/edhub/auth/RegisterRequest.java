@@ -6,9 +6,10 @@ import lombok.*;
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
+// contendrá los datos que el usuario envía en la petición para registrarse al sistema
 public class RegisterRequest {
 
-    // registrará los datos de la petición
+    // atributos
     private String username;
     private String email;
     private String password;

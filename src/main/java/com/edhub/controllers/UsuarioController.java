@@ -3,13 +3,7 @@ package com.edhub.controllers;
 import java.util.List;
 
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.DeleteMapping;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PutMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 import com.edhub.models.Usuario;
 import com.edhub.services.UsuarioService;
 import lombok.RequiredArgsConstructor;
@@ -20,23 +14,27 @@ import lombok.RequiredArgsConstructor;
 public class UsuarioController {
 
     private final UsuarioService usuarioService;
-    
+
+    // retornará todos los usuarios
     @GetMapping
-    public List<Usuario> findAll() {
+    public List<Usuario> obtenerTodos() {
         return usuarioService.obtenerTodos();
     }
 
+    // retornará un usuario en específico
     @GetMapping("/findByUsername/{username}")
-    public Usuario findByUsername(@PathVariable String username) {
+    public Usuario obtenerPorUsername(@PathVariable String username) {
         return usuarioService.obtenerPorUsername(username);
     }
 
+    // actualizará un usuario
     @PutMapping("/update-user/{id}")
-    public ResponseEntity<Void> updateUser(@PathVariable Long id, @RequestBody Usuario usuario) {
-        usuarioService.actualizarUsuario(id, usuario);
+    public ResponseEntity<Void> actualizarUsuario(@RequestBody Usuario usuario) {
+        usuarioService.actualizarUsuario(usuario);
         return ResponseEntity.ok().build();
     }
 
+    // eliminará un usuario
     @DeleteMapping("/delete-user/{id}")
     public ResponseEntity<Void> deleteUser(@PathVariable Long id) {
         usuarioService.eliminarUsuario(id);

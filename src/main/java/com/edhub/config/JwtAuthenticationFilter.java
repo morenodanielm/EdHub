@@ -14,6 +14,7 @@ import lombok.RequiredArgsConstructor;
 
 @Component
 @RequiredArgsConstructor
+// clase filtro que atrapará cada petición al servidor para autenticarla
 public class JwtAuthenticationFilter extends OncePerRequestFilter {
 
     private final JwtService jwtService;
@@ -30,8 +31,7 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
         final String jwtToken;
         final String username;
 
-        // si el token es nulo o no inicia con "Bearer" se invoca el siguiente filtro en
-        // la cadena
+        // si el token es nulo o no inicia con "Bearer" se invoca el siguiente filtro en la cadena
         if (authHeader == null || !authHeader.startsWith("Bearer ")) {
             filterChain.doFilter(request, response);
             return;
@@ -41,18 +41,14 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
         jwtToken = authHeader.substring(7);
         // obtenemos el username(puede ser username o email) del jwtService
         username = jwtService.extractUsername(jwtToken);
-        // si getAuthentication retorna null, quiere decir que el usuario no está
-        // autenticado
+        // si getAuthentication retorna null, quiere decir que el usuario no está autenticado
         if (username != null && SecurityContextHolder.getContext().getAuthentication() == null) {
-            // obtenemos el usuario con el UserDetailsService(el lo obtendrá de la base de
-            // datos)
+            // obtenemos el usuario con el UserDetailsService(finalmente lo obtendrá de la base de datos)
             UserDetails userDetails = this.userDetailsService.loadUserByUsername(username);
             // validar que el token siga vigente
             if (jwtService.isTokenValid(jwtToken, userDetails)) {
-                // este objeto es una simple representación del username y password que se crea
-                // con fin de poder actualizar el
-                // SecurityContextHolder(contexto de seguridad de Spring) y autenticar el
-                // usuario
+                // este objeto es una simple representación del username y password que se crea con fin de poder actualizar el
+                // SecurityContextHolder(contexto de seguridad de Spring) y autenticar el usuario
                 UsernamePasswordAuthenticationToken authToken = new UsernamePasswordAuthenticationToken(
                         userDetails,
                         null,
@@ -65,7 +61,7 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
                 SecurityContextHolder.getContext().setAuthentication(authToken);
             }
         }
-        // invoca el siguiente filtro en la cadena(hacerlo siempre que se trabaje con filtros)
+        // invoca el siguiente filtro en la cadena
         filterChain.doFilter(request, response);
     }
 

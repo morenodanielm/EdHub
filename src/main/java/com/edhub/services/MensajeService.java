@@ -1,5 +1,6 @@
 package com.edhub.services;
 
+import java.util.Collections;
 import java.util.List;
 import com.edhub.exceptions.EdhubExceptions;
 import com.edhub.mapper.MensajeDTOToMensaje;
@@ -13,6 +14,7 @@ import lombok.RequiredArgsConstructor;
 
 @Service
 @RequiredArgsConstructor
+//clase de servicio para entidad mensaje
 public class MensajeService {
 
     private final MensajeRepository mensajeRepository;
@@ -28,10 +30,14 @@ public class MensajeService {
             .orElseThrow(() -> new EdhubExceptions("Mensaje no hallado", HttpStatus.NOT_FOUND));
     }
 
+    // retornará todos los mensajes del más antiguo al más reciente
     public List<Mensaje> obtenerTodos() {
-        return mensajeRepository.findAll();
+    	List<Mensaje> mensajes = mensajeRepository.findAll();
+    	Collections.sort(mensajes, Collections.reverseOrder());
+        return mensajes;
     }
 
+    // eliminará un mensaje en específico
     public void eliminarMensaje(Mensaje mensaje) {
         if(!mensajeRepository.existsById(mensaje.getIdMensaje())) {
             throw new EdhubExceptions("El mensaje no existe", HttpStatus.NOT_FOUND);

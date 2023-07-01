@@ -13,8 +13,10 @@ import lombok.Builder;
 @AllArgsConstructor
 @Entity
 @Table(name = "comentarios")
+// clase modelo que representa la tabla comentarios en la BD
 public class Comentario {
 
+    // atributos
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long idComentario;
@@ -36,6 +38,7 @@ public class Comentario {
     @Column(name = "fecha_creacion", columnDefinition = "TIMESTAMP")
     private LocalDateTime fechaCreacion;
 
+    // constructores
     public Comentario() {
     }
 
@@ -46,6 +49,7 @@ public class Comentario {
         this.fechaCreacion = fechaCreacion;
     }
 
+    // getter y setter
     public Long getIdComentario() {
         return idComentario;
     }
@@ -86,6 +90,7 @@ public class Comentario {
         this.fechaCreacion = fechaCreacion;
     }
 
+    // métodos para comparar objetos de esta clase
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
@@ -99,6 +104,7 @@ public class Comentario {
         return Objects.hash(idComentario);
     }
 
+    // proporciona información del objeto actual
     @Override
     public String toString() {
         return "Comentario{" +
@@ -109,6 +115,7 @@ public class Comentario {
                 '}';
     }
 
+    // este método se ejecutará antes de persistir el objeto mensaje para agregar la fecha actual
     @PrePersist
     public void prePersist() {
         fechaCreacion = LocalDateTime.now();

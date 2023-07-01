@@ -6,6 +6,7 @@ import lombok.EqualsAndHashCode;
 
 @Data
 @EqualsAndHashCode(callSuper = false)
+// clase exception personalizada que se arrojará cuando ocurra un error en la API
 public class EdhubExceptions extends RuntimeException {
 
     private String mensaje;

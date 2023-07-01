@@ -11,19 +11,20 @@ import lombok.RequiredArgsConstructor;
 @RestController
 @RequestMapping("/api/v1/auth")
 @RequiredArgsConstructor
+// manejará todas las peticiones de registro e inicio de sesión
 public class AuthenticationController {
 
     private final AuthenticationService service;
     
     // endPoint para registrar el usuario que viene en la petición y devolver el token asignado como respuesta
     @PostMapping("/register")
-    public ResponseEntity<AuthenticationResponse> register(@RequestBody RegisterRequest registerRequest) {
+    public ResponseEntity<AuthenticationResponse> registrar(@RequestBody RegisterRequest registerRequest) {
         return ResponseEntity.ok(service.register(registerRequest));
     }
 
     // endPoint para autenticar datos del usuario que viene en la petición y devolver un token como respuesta
     @PostMapping("/authenticate")
-    public ResponseEntity<AuthenticationResponse> authenticate(@RequestBody AuthenticationRequest authRequest) {
+    public ResponseEntity<AuthenticationResponse> autenticar(@RequestBody AuthenticationRequest authRequest) {
         return ResponseEntity.ok(service.authenticate(authRequest));
     }
 }

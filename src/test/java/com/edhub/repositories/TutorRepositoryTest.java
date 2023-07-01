@@ -1,8 +1,6 @@
 package com.edhub.repositories;
 
-import com.edhub.models.Especialidad;
-import com.edhub.models.Role;
-import com.edhub.models.Tutor;
+import com.edhub.models.*;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -12,15 +10,16 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 import java.time.LocalDateTime;
-import java.util.List;
-
+import java.util.*;
 import static org.junit.jupiter.api.Assertions.*;
 
 @DataJpaTest
 @ExtendWith(MockitoExtension.class)
+// clase test para tutor repository
 class TutorRepositoryTest {
 
     @Autowired
+    // objeto bajo test
     private TutorRepository underTest;
 
     @Mock
@@ -37,9 +36,10 @@ class TutorRepositoryTest {
         tutor.setFechaCreacion(LocalDateTime.now());
         tutor.setIdUsuario(1L);
         tutor.setDisponible(true);
-        tutor.setEspecialidad(Especialidad.JAVA);
+        tutor.setEspecialidad(EnumSet.of(Especialidad.JAVA));
     }
 
+    // test para verficar que se puede obtener todos los tutores con cierta especialidad
     @Test
     void itShouldFindAllByEspecialidad() {
         // given
@@ -52,6 +52,7 @@ class TutorRepositoryTest {
         assertThat(allByEspecialidad.size()).isEqualTo(1);
     }
 
+    // test para verficar que se puede validar la existencia de un tutor con cierta especialidad
     @Test
     void itShouldFindByEspecialidad() {
         // given

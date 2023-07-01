@@ -18,8 +18,10 @@ import lombok.Builder;
 @AllArgsConstructor
 @Entity
 @Table(name = "chats")
+// clase modelo que representa la tabla chats en la BD
 public class Chat {
 
+    // atributos
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
@@ -27,10 +29,12 @@ public class Chat {
     @OneToMany(mappedBy = "chat", cascade = CascadeType.ALL)
     private List<Mensaje> mensajes;
 
+    // constructor
     public Chat() {
         this.mensajes = new ArrayList<>();
     }
 
+    // getter y setter
     public Long getId() {
         return id;
     }
@@ -45,6 +49,7 @@ public class Chat {
         }
     }
 
+    // métodos para comparar objetos de esta clase
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
@@ -58,6 +63,7 @@ public class Chat {
         return Objects.hash(id);
     }
 
+    // proporciona información del objeto actual
     @Override
     public String toString() {
         return "Chat{" +
