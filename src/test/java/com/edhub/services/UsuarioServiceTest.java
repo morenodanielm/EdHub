@@ -2,6 +2,7 @@ package com.edhub.services;
 
 import com.edhub.exceptions.EdhubExceptions;
 import com.edhub.models.*;
+import com.edhub.repositories.PasswordTokenRepository;
 import com.edhub.repositories.UsuarioRepository;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -11,6 +12,8 @@ import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.http.HttpStatus;
+import org.springframework.security.crypto.password.PasswordEncoder;
+
 import java.time.LocalDateTime;
 import java.util.*;
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
@@ -31,11 +34,17 @@ class UsuarioServiceTest {
     private UsuarioRepository usuarioRepository;
 
     @Mock
+    private PasswordTokenRepository passwordTokenRepository;
+
+    @Mock
+    private PasswordEncoder passwordEncoder;
+
+    @Mock
     private Usuario usuario;
 
     @BeforeEach
     void setUp() {
-        underTest = new UsuarioService(usuarioRepository);
+        underTest = new UsuarioService(usuarioRepository, passwordTokenRepository, passwordEncoder);
         usuario = Usuario.builder()
                 .username("daniel_14")
                 .email("daniel@mail.com")
@@ -65,7 +74,7 @@ class UsuarioServiceTest {
     @Test
     void itShouldGetByUsername() {
         // given
-        // cuando se invoque el m�todo findByUsername con cualquier string como par�metro, retornaremos un usuario, esto para evitar exception
+        // cuando se invoque el metodo findByUsername con cualquier string como par�metro, retornaremos un usuario, esto para evitar exception
         given(usuarioRepository.findByUsername(anyString()))
                 .willReturn(Optional.of(
                         Usuario.builder()

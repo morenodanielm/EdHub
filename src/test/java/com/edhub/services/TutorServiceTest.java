@@ -7,14 +7,11 @@ import org.junit.jupiter.api.*;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.http.HttpStatus;
 import java.time.LocalDateTime;
 import java.util.*;
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 import static org.assertj.core.api.AssertionsForClassTypes.assertThatThrownBy;
-import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.BDDMockito.given;
 
@@ -68,12 +65,12 @@ class TutorServiceTest {
         tutor.setFechaCreacion(LocalDateTime.now());
         tutor.setEspecialidad(EnumSet.of(Especialidad.JAVA));
         tutor.setDisponible(false);
-        given(tutorRepository.findAllByEspecialidad(any())).willReturn(List.of(tutor));
-        given(tutorRepository.existsByEspecialidad(Especialidad.JAVA)).willReturn(true);
+        given(tutorRepository.findAllByEspecialidadesIn(any())).willReturn(List.of(tutor));
+        given(tutorRepository.existsByEspecialidadesIn(EnumSet.of(Especialidad.JAVA))).willReturn(true);
 
 
         // when
-        List<Tutor> tutors = underTest.obtenerTodoPorEspecialidad(Especialidad.JAVA);
+        List<Tutor> tutors = underTest.obtenerTodoPorEspecialidad(EnumSet.of(Especialidad.JAVA));
         int actual = tutors.size();
         int expected = 1;
 
@@ -85,11 +82,11 @@ class TutorServiceTest {
     // test para verificar que se arroje la excepción cuando se debe lanzar
     void itShouldThrowExceptionWhenEspecialidadDoesNotExists() {
         // given
-        given(tutorRepository.existsByEspecialidad(any())).willReturn(false);
+        given(tutorRepository.existsByEspecialidadesIn(any())).willReturn(false);
 
         // when
         // then
-        assertThatThrownBy(() -> underTest.obtenerTodoPorEspecialidad(Especialidad.CSHARP))
+        assertThatThrownBy(() -> underTest.obtenerTodoPorEspecialidad(EnumSet.of(Especialidad.CSHARP)))
                 .isInstanceOf(EdhubExceptions.class)
                 .hasMessageContaining("Especialidad no hallada", HttpStatus.NOT_FOUND);
     }

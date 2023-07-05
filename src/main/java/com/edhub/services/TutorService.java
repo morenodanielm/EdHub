@@ -61,11 +61,11 @@ public class TutorService {
     }
 
     // retornará todos los tutores con cierta especialidad
-    public List<Tutor> obtenerTodoPorEspecialidad(Especialidad especialidad) {
-        if (!tutorRepository.existsByEspecialidad(especialidad)) {
+    public List<Tutor> obtenerTodoPorEspecialidad(EnumSet<Especialidad> especialidad) {
+        if (!tutorRepository.existsByEspecialidadesIn(especialidad)) {
             throw new EdhubExceptions("Especialidad no hallada", HttpStatus.NOT_FOUND);
         }
-        return tutorRepository.findAllByEspecialidad(especialidad);
+        return tutorRepository.findAllByEspecialidadesIn(especialidad);
     }
 
     // obtiene todos los tutores

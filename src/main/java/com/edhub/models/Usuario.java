@@ -75,6 +75,9 @@ public class Usuario implements UserDetails {
     @OneToMany(mappedBy = "calificador", cascade = CascadeType.ALL)
     private Set<Calificacion> calificacionesComoCalificado;
 
+    @OneToOne(mappedBy = "usuario")
+    private RestablecerPasswordToken restablecerPasswordToken;
+
     // constructores
     public Usuario() {
         this.calificacionesComoCalificado = new HashSet<>();

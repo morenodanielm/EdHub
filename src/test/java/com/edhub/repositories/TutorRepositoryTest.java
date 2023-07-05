@@ -11,7 +11,6 @@ import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 import java.time.LocalDateTime;
 import java.util.*;
-import static org.junit.jupiter.api.Assertions.*;
 
 @DataJpaTest
 @ExtendWith(MockitoExtension.class)
@@ -46,7 +45,7 @@ class TutorRepositoryTest {
         underTest.save(tutor);
 
         // when
-        List<Tutor> allByEspecialidad = underTest.findAllByEspecialidad(Especialidad.JAVA);
+        List<Tutor> allByEspecialidad = underTest.findAllByEspecialidadesIn(EnumSet.of(Especialidad.JAVA));
 
         // then
         assertThat(allByEspecialidad.size()).isEqualTo(1);
@@ -59,7 +58,7 @@ class TutorRepositoryTest {
         underTest.save(tutor);
 
         // when
-        boolean b = underTest.existsByEspecialidad(Especialidad.JAVA);
+        boolean b = underTest.existsByEspecialidadesIn(EnumSet.of(Especialidad.JAVA));
 
         // then
         assertThat(b).isTrue();

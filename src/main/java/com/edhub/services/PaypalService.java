@@ -6,8 +6,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.springframework.stereotype.Service;
-
-import com.edhub.models.Orden;
 import com.edhub.repositories.PagoDetalleRepository;
 import com.paypal.api.payments.Amount;
 import com.paypal.api.payments.Payer;
