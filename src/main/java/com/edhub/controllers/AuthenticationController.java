@@ -11,6 +11,7 @@ import lombok.RequiredArgsConstructor;
 @RestController
 @RequestMapping("/api/v1/auth")
 @RequiredArgsConstructor
+@CrossOrigin
 // manejará todas las peticiones de registro e inicio de sesión
 public class AuthenticationController {
 

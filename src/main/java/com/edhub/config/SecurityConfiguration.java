@@ -37,10 +37,10 @@ public class SecurityConfiguration {
                             .anyRequest()
                             .authenticated();
                 })
-                .headers((header) -> {
+                /*.headers((header) -> {
                     header.addHeaderWriter(
-                            new StaticHeadersWriter("Access-Control-Allow-Origin", "http://localhost:3000"));
-                })
+                            new StaticHeadersWriter("Access-Control-Allow-Origin", "http://127.0.0.1:5500/register.html"));
+                })*/
                 // se establece la política de session sin estado, es decir, no se creará un HttpSession
                 .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 // indicarle a Spring que proveedor de autenticación se quiere usar

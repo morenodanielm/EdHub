@@ -1,8 +1,13 @@
 package com.edhub.models;
 
-import jakarta.persistence.*;
+import java.util.EnumSet;
+
+import jakarta.persistence.Column;
+import jakarta.persistence.Entity;
+import jakarta.persistence.EnumType;
+import jakarta.persistence.Enumerated;
+import jakarta.persistence.Table;
 import jakarta.validation.constraints.NotNull;
-import java.util.*;
 
 @Entity
 @Table(name = "tutores")
@@ -18,14 +23,18 @@ public class Tutor extends Usuario{
     @Column(name = "disponible")
     private boolean disponible;
 
+    @Column(name = "sobre_mi")
+    private String sobreMi;
+
     // constructores
     public Tutor() {
 
     }
 
-    public Tutor(boolean disponible) {
+    public Tutor(boolean disponible, String sobreMi) {
         super();
         this.disponible = disponible;
+        this.sobreMi = sobreMi;
     }
 
     // getter y setter
@@ -43,6 +52,22 @@ public class Tutor extends Usuario{
 
     public void setDisponible(boolean disponible) {
         this.disponible = disponible;
+    }
+
+    public EnumSet<Especialidad> getEspecialidades() {
+        return especialidades;
+    }
+
+    public void setEspecialidades(EnumSet<Especialidad> especialidades) {
+        this.especialidades = especialidades;
+    }
+
+    public String getSobreMi() {
+        return sobreMi;
+    }
+
+    public void setSobreMi(String sobreMi) {
+        this.sobreMi = sobreMi;
     }
 
     // métodos para comparar objetos de esta clase
@@ -64,4 +89,5 @@ public class Tutor extends Usuario{
                 ", disponible=" + disponible +
                 '}';
     }
+
 }

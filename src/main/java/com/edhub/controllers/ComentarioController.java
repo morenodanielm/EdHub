@@ -6,6 +6,8 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import com.edhub.models.Comentario;
 import com.edhub.services.ComentarioService;
+import com.edhub.services.dto.ComentarioDTO;
+
 import lombok.RequiredArgsConstructor;
 
 @RequiredArgsConstructor
@@ -24,8 +26,8 @@ public class ComentarioController {
 
     // recibe un comentario para persistirlo
     @PostMapping("/agregar-comentario")
-    public Comentario agregarComentario(@RequestBody Comentario comentario) {
-        return comentarioService.agregarComentario(comentario);
+    public Comentario agregarComentario(@RequestBody ComentarioDTO comentarioDTO) {
+        return comentarioService.agregarComentario(comentarioDTO);
     }
 
     // recibe un comentario para actualizarlo
