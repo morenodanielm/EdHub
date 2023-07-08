@@ -3,6 +3,7 @@ package com.edhub.controllers;
 import org.springframework.messaging.handler.annotation.*;
 import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.RequestMapping;
 import com.edhub.services.MensajeService;
 import com.edhub.services.dto.MensajeDTO;
@@ -11,6 +12,7 @@ import lombok.RequiredArgsConstructor;
 @RequestMapping("/api/v1/paypal")
 @RequiredArgsConstructor
 @Controller
+@CrossOrigin(origins = "http://127.0.0.1:5500")
 // contendrá recibirá todos los mensajes enviados al chat
 public class ChatController {
 

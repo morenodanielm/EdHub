@@ -11,6 +11,7 @@ import lombok.AllArgsConstructor;
 @RequestMapping("/api/v1/paypal")
 @AllArgsConstructor
 @RestController
+@CrossOrigin(origins = "http://127.0.0.1:5500")
 // recibirá las peticiones para la realización de pagos
 public class PaypalController {
 	
